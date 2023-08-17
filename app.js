@@ -7,6 +7,11 @@ const { errors } = require('celebrate');
 const usersRouter = require('./routes/users');
 const moviesRouter = require('./routes/movies');
 const { auth } = require('./middlewares/auth');
+const {
+  registerValidation,
+  loginValidation,
+} = require('./middlewares/validation');
+const { register, login } = require('./controllers/users');
 
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
@@ -29,6 +34,9 @@ mongoose
 
 app.use(requestLogger);
 
+app.post('/signin', loginValidation, login);
+app.post('/signup', registerValidation, register);
+
 // Регистрация маршрутов
 app.use('/users', auth, usersRouter);
 app.use('/movies', auth, moviesRouter);
@@ -39,7 +47,7 @@ app.get('/', (req, res) => {
 });
 
 // Маршруты и логика приложения
-app.use('/', auth);
+// app.use('/', auth);
 app.use((req, res, next) => next(new NotFoundError('Страницы по запрошенному URL не существует')));
 app.use(errorLogger);
 app.use(errors());
