@@ -43,7 +43,7 @@ const createMovie = (req, res, next) => {
     });
 };
 
-const getMovie = (req, res, next) => {
+const getMovies = (req, res, next) => {
   const userId = req.user._id;
 
   Movie
@@ -74,6 +74,6 @@ const deleteMovie = (req, res, next) => {
 
 module.exports = {
   createMovie,
-  getMovie,
+  getMovies,
   deleteMovie,
 };
