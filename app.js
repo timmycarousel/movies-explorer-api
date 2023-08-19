@@ -11,7 +11,7 @@ const {
   registerValidation,
   loginValidation,
 } = require('./middlewares/validation');
-const { register, login } = require('./controllers/users');
+const { register, login, logout } = require('./controllers/users');
 
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
@@ -19,6 +19,7 @@ const NotFoundError = require('./errors/not-found-err');
 const error = require('./middlewares/error');
 
 const app = express();
+
 app.use(cookieParser());
 app.use(bodyParser.json());
 
@@ -34,8 +35,14 @@ mongoose
 
 app.use(requestLogger);
 
+// Роут для входа в систему
 app.post('/signin', loginValidation, login);
+
+// Роут регистрации в системе
 app.post('/signup', registerValidation, register);
+
+// Роут для выхода из системы
+app.post('/signout', logout);
 
 // Регистрация маршрутов
 app.use('/users', auth, usersRouter);

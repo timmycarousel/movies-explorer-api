@@ -9,6 +9,7 @@ const NotFoundError = require('../errors/not-found-err');
 const { NODE_ENV, JWT_SECRET } = process.env;
 
 // eslint-disable-next-line consistent-return
+// регистрация
 const register = (req, res, next) => {
   const { name, email, password } = req.body;
 
@@ -41,6 +42,13 @@ const register = (req, res, next) => {
     });
 };
 
+// выход из системы
+const logout = (req, res) => {
+  res.clearCookie('Authorization'); // Удаление куки с JWT
+  res.status(200).send({ message: 'Вы успешно вышли из системы.' });
+};
+
+// вход в систему
 const login = (req, res, next) => {
   const { email, password } = req.body;
 
@@ -88,6 +96,7 @@ const login = (req, res, next) => {
     .catch(next);
 };
 
+// получение всех пользователей
 const getUsers = (req, res, next) => {
   User.find({})
     .then((users) => {
@@ -96,6 +105,7 @@ const getUsers = (req, res, next) => {
     .catch(next);
 };
 
+// получение данный зарегистрированного пользователя
 const getUserInfo = (req, res, next) => {
   const userId = req.user._id;
   User.findById(userId)
@@ -115,6 +125,8 @@ const getUserInfo = (req, res, next) => {
     .catch(next);
 };
 
+
+// изменение данный пользователя
 const updateUser = (req, res, next) => {
   const { name, about } = req.body;
 
@@ -139,5 +151,5 @@ const updateUser = (req, res, next) => {
 };
 
 module.exports = {
-  register, login, getUsers, getUserInfo, updateUser,
+  logout, register, login, getUsers, getUserInfo, updateUser,
 };
