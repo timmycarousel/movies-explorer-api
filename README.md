@@ -20,4 +20,4 @@
 
 IP-адрес 158.160.47.126
 
-Backend http://api.moviesexplorer.nomoredomainsicu.ru
+Backend https://api.moviesexplorer.nomoredomainsicu.ru
