@@ -31,3 +31,5 @@ app.use(router);
 app.use(requestLogger);
 app.use(errorLogger);
 app.use(error);
+
+app.listen(3000);
