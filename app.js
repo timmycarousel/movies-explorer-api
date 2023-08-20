@@ -31,7 +31,3 @@ app.use(router);
 app.use(requestLogger);
 app.use(errorLogger);
 app.use(error);
-
-app.listen(3000, () => {
-  console.log('Сервер подключен на порту 3000');
-});
