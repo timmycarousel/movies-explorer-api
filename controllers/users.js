@@ -125,7 +125,6 @@ const getUserInfo = (req, res, next) => {
     .catch(next);
 };
 
-
 // изменение данный пользователя
 const updateUser = (req, res, next) => {
   const { name, about } = req.body;
