@@ -5,6 +5,16 @@ const BadRequestError = require('../errors/bad-request-err');
 const ConflictError = require('../errors/conflict-err');
 const UnauthorizedError = require('../errors/unauthorized-err');
 const NotFoundError = require('../errors/not-found-err');
+const {
+  successRegistrationMessage,
+  registrationError,
+  emailInUse,
+  invalidLoginCredentials,
+  userNotFound,
+  profileUpdateError,
+  userAlreadyRegistered,
+  logoutSuccessMessage,
+} = require('../constants/config');
 
 const { NODE_ENV, JWT_SECRET } = process.env;
 
@@ -20,32 +30,27 @@ const register = (req, res, next) => {
       email,
       password: hash,
     }))
-    .then((user) => {
-      const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: '7d' });
-
+    .then(() => {
       res.status(201).send({
-        token,
         email,
         name,
-        message: `Пользователь ${email} успешно зарегистрирован.`,
+        message: successRegistrationMessage,
       });
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        return next(new BadRequestError('Переданы некорректные данные'));
-      }
-      if (err.code === 11000) {
-        console.log('уже есть такой e-mail');
-        return next(new ConflictError('Такой пользователь уже существует'));
-      }
-      return next(err);
+        next(new BadRequestError(registrationError));
+      } if (err.code === 11000) {
+        // console.log('уже есть такой e-mail');
+        next(new ConflictError(emailInUse));
+      } else { next(err); }
     });
 };
 
 // выход из системы
 const logout = (req, res) => {
   res.clearCookie('Authorization'); // Удаление куки с JWT
-  res.status(200).send({ message: 'Вы успешно вышли из системы.' });
+  res.status(200).send({ message: logoutSuccessMessage });
 };
 
 // вход в систему
@@ -58,19 +63,17 @@ const login = (req, res, next) => {
     .select('+password')
     .then((user) => {
       if (!user) {
-        throw new UnauthorizedError('Неверный логин или пароль');
+        throw new UnauthorizedError(invalidLoginCredentials);
       }
 
       foundUser = user; // Сохранение найденного пользователя в переменную
-
-      // res.clearCookie('Authorization', { httpOnly: true });
 
       return bcrypt
         .compare(password, foundUser.password)
         .then((isValidPassword) => {
           if (!isValidPassword) {
-            console.log('некорректный пароль');
-            throw new UnauthorizedError('Неверный логин или пароль');
+            // console.log('некорректный пароль');
+            throw new UnauthorizedError(invalidLoginCredentials);
           }
 
           const token = jwt.sign(
@@ -87,8 +90,8 @@ const login = (req, res, next) => {
             sameSite: 'strict',
           });
 
-          console.log('корректный пароль');
-          console.log(`токен ${token}`);
+          // console.log('корректный пароль');
+          // console.log(`токен ${token}`);
 
           return res.status(200).send({ token });
         });
@@ -111,7 +114,7 @@ const getUserInfo = (req, res, next) => {
   User.findById(userId)
     .then((user) => {
       if (!user) {
-        throw new NotFoundError('Пользователь c таким _id не найден');
+        throw new NotFoundError(userNotFound);
       } else {
         res.send({
           _id: user._id,
@@ -136,13 +139,15 @@ const updateUser = (req, res, next) => {
   )
     .then((user) => {
       if (!user) {
-        throw new NotFoundError('Пользователь по указанному _id не найден');
+        throw new NotFoundError(userNotFound);
       }
       res.status(200).json(user);
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new BadRequestError('Переданы некорректные данные'));
+        next(new BadRequestError(profileUpdateError));
+      } else if (err.code === 11000) {
+        next(new ConflictError(userAlreadyRegistered));
       } else {
         next(err);
       }
