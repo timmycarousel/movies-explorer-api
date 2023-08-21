@@ -3,6 +3,7 @@ const NotFoundError = require('../errors/not-found-err');
 const ForbiddenError = require('../errors/forbidden-err');
 const BadRequestError = require('../errors/bad-request-err');
 const {
+  removedMovie,
   invalidDataReceived,
   movieNotFound,
   deleteMoviePermissionDenied,
@@ -58,16 +59,16 @@ const getMovies = (req, res, next) => {
 };
 
 const deleteMovie = (req, res, next) => {
-  Movie.findByIdAndDelete(req.params.id)
+  Movie.findById(req.params.id)
     .orFail(new NotFoundError(movieNotFound))
     .then((movie) => {
-      if (req.user._id === movie.owner.toString()) {
-        // Пользователь является владельцем карточки, можно удалить
-        return movie.deleteOne();
+      if (req.user._id.toString() !== movie.owner.toString()) {
+        throw new ForbiddenError(deleteMoviePermissionDenied);
       }
-      throw new ForbiddenError(deleteMoviePermissionDenied);
+
+      return movie.deleteOne();
     })
-    .then((removedMovie) => res.send(removedMovie))
+    .then(() => res.send(removedMovie))
     .catch((err) => {
       if (err.name === 'CastError') {
         next(new BadRequestError(invalidDataReceived));

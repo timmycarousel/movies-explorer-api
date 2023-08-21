@@ -1,5 +1,6 @@
 const MONGO_HOST = 'mongodb://127.0.0.1:27017/bitfilmsdb';
 
+const removedMovie = 'Фильм успешно удален';
 const successRegistrationMessage = 'Регистрация прошла успешно.';
 const registrationError = 'Ошибка при регистрации пользователя.';
 const emailInUse = 'Данный email уже используется другим пользователем.';
@@ -16,6 +17,7 @@ const logoutSuccessMessage = 'Вы успешно вышли из системы
 
 module.exports = {
   MONGO_HOST,
+  removedMovie,
   successRegistrationMessage,
   registrationError,
   emailInUse,
