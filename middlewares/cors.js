@@ -1,22 +1,5 @@
 // Массив доменов, с которых разрешены кросс-доменные запросы
-const allowedCors = [
-  'https://localhost:3000',
-  'http://localhost:3000',
-  'https://192.168.0.120:3000',
-  'http://192.168.0.120:3000',
-  '192.168.0.120:3000',
-  '192.168.0.120',
-  'https://51.250.68.127:3000',
-  'http://51.250.68.127:3000',
-  'https://51.250.68.127',
-  'http://51.250.68.127',
-  'https://192.168.0.120',
-  'https://192.168.0.120',
-  'https://moviesexplorer.nomoredomainsicu.ru:3000',
-  'http://moviesexplorer.nomoredomainsicu.ru:3000',
-  'https://moviesexplorer.nomoredomainsicu.ru.sbs',
-  'http://moviesexplorer.nomoredomainsicu.ru.sbs',
-];
+const allowedCors = ['*'];
 
 module.exports = (req, res, next) => {
   const { origin } = req.headers; // Сохраняем источник запроса в переменную origin
@@ -27,7 +10,7 @@ module.exports = (req, res, next) => {
 
   // проверяем, что источник запроса есть среди разрешённых
   if (allowedCors.includes(origin)) {
-    res.header('Access-Control-Allow-Origin', origin);
+    res.header('Access-Control-Allow-Origin', '*'); // Разрешаем CORS с любых доменов
   }
 
   res.header('Access-Control-Allow-Credentials', true);
