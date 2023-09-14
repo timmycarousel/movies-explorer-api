@@ -34,6 +34,6 @@ app.use(requestLogger);
 app.use(errorLogger);
 app.use(error);
 
-app.listen(3010, () => {
-  console.log('Сервер запущен на порту 3010');
+app.listen(3000, () => {
+  console.log('Сервер запущен на порту 3000');
 });
