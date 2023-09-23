@@ -14,8 +14,8 @@ const allowedCors = [
   'https://192.168.0.120',
   'https://moviesexplorer.nomoredomainsicu.ru:3000',
   'http://moviesexplorer.nomoredomainsicu.ru:3000',
-  'https://moviesexplorer.nomoredomainsicu.ru.sbs',
-  'http://moviesexplorer.nomoredomainsicu.ru.sbs',
+  'https://moviesexplorer.nomoredomainsicu.ru',
+  'http://moviesexplorer.nomoredomainsicu.ru',
 ];
 
 module.exports = (req, res, next) => {
