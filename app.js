@@ -1,17 +1,17 @@
-require("dotenv").config();
-const express = require("express");
-const mongoose = require("mongoose");
-const { errors } = require("celebrate");
-const cookieParser = require("cookie-parser");
-const bodyParser = require("body-parser");
-const helmet = require("helmet");
-const cors = require("./middlewares/cors");
-const limiter = require("./middlewares/rateLimiter");
-const router = require("./routes/index");
-const { requestLogger, errorLogger } = require("./middlewares/logger");
-const { MONGO_HOST } = require("./constants/config");
+require('dotenv').config();
+const express = require('express');
+const mongoose = require('mongoose');
+const { errors } = require('celebrate');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const helmet = require('helmet');
+const cors = require('./middlewares/cors');
+const limiter = require('./middlewares/rateLimiter');
+const router = require('./routes/index');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
+const { MONGO_HOST } = require('./constants/config');
 
-const error = require("./middlewares/error");
+const error = require('./middlewares/error');
 
 const app = express();
 
@@ -34,6 +34,6 @@ app.use(requestLogger);
 app.use(errorLogger);
 app.use(error);
 
-app.listen(3001, () => {
-  console.log("Сервер запущен на порту 3001");
+app.listen(3000, () => {
+  console.log('Сервер запущен на порту 3000');
 });
