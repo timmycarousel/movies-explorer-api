@@ -2,6 +2,8 @@
 const allowedCors = [
   'https://localhost:3000',
   'http://localhost:3000',
+  'https://localhost:3001',
+  'http://localhost:3001',
   'https://192.168.0.120:3000',
   'http://192.168.0.120:3000',
   '192.168.0.120:3000',
